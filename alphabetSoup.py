@@ -145,15 +145,15 @@ class alphabetSoupService(object):
         print("\n\n\n\n\n")
         print(vpath)
         if len(vpath) == 0:
-            print("pop1")
             return self
         if len(vpath) == 1:
             return self
         if len(vpath) == 2:
-            print("popo")
-
+            print("pop2")
+            vpath.pop(0)
+            cherrypy.request.params['uuid'] = vpath.pop(0)
+            return Encontrar()
         if len(vpath) == 3:
-            print("HHHHHHHHHHAL;SDJFAL")
             if vpath[1] == 'list':
                 vpath.pop(0)
                 vpath.pop(0)
@@ -175,12 +175,66 @@ class alphabetSoupService(object):
         s = Soup(w,h,ltr,rtl,ttb,btt,d)
         cherrypy.session[s.id] = s
         return s.id
-    #''.join(random.sample(string.hexdigits, int(length)))
 
 class List(object):
     @cherrypy.expose
     def index(self, uuid):
         return str(cherrypy.session[uuid].words)
+
+
+class Encontrar(object):
+    @cherrypy.expose
+    def index(self, uuid):
+        self.uuid = uuid
+        return """<html>
+                   <head>
+                   </head>
+                    <body style="font-familly:courier;">"""+str(cherrypy.session[uuid])+"""
+                    <form method="get" action="encuentra">
+              start row   <input type="sr" value="" name="sr" />
+              <br>
+              start column   <input type="sc" value="" name="sc" />
+              <br>
+              end row   <input type="er" value="" name="er" />
+              <br>
+              end column   <input type="ec" value="" name="ec" />
+              <button type="submit">busca</button>
+              <br>
+            </form>
+
+                    </body>
+                    </html>"""
+    
+    @cherrypy.expose
+    def encuentra(self, sr, sc, er, ec):
+        ii = -1
+        jj = -1
+        length = max(abs(sr-er), abs(sc-ec)) + 1
+        if sr < er:
+            ii = 1
+        elif sr == er:
+            ii = 0
+        else:
+            ii = -1
+
+        if sc < ec:
+            jj = 1
+        elif sc == ec:
+            jj = 0
+        else:
+            jj = -1
+        i = sr
+        j = sc
+        word = []
+        board = cherrypy.session[self.uuid].board
+        for _ in range(length):
+            word.append(board[i][j])
+            i +=  ii
+            j +=  jj
+        if ''.join(word) in Soup.words:
+            return True
+        return False
+
 
 class View(object):
     @cherrypy.expose
@@ -190,8 +244,6 @@ class View(object):
                    </head>
                     <body style="font-familly:courier;">"""+str(cherrypy.session[uuid])+"""</body>
                     </html>"""
-
-        return 
 
 if __name__ == '__main__':
     """
