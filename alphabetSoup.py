@@ -9,8 +9,8 @@ import cherrypy
 class Soup:
     words = [word[:-1] for word in open("words.txt")]        
     def __init__(self, w, h, ltr, rtl, ttb, btt, d):
-        self.w = w
-        self.h = h
+        self.w = int(w)
+        self.h = int(h)
         self.ltr = ltr == 'True'
         self.rtl = rtl == 'True'
         self.ttb = ttb == 'True'
@@ -25,7 +25,7 @@ class Soup:
         self.__create_board()
 
     def __str__(self):
-        return '\n'.join(['|'+'|'.join(row)+'|' for row in self.board])
+        return '<br>'.join(['|'+'|'.join(row)+'|' for row in self.board])
 
 
     def __create_board(self):
@@ -105,7 +105,17 @@ class Soup:
         
 
 class alphabetSoupService(object):
-    @cherrypy.expose
+    #@cherrypy.expose
+    def index_(self):
+
+        return """<html>
+                   <head>
+                  <meta http-equiv="Refresh" content="5; url=http://localhost:8080/alphabetSoup"> 
+                   </head>
+                    <body>
+                    </body>
+                    </html>"""
+    @cherrypy.expose#(['alphabetSoup'])
     def index(self):
         return """<html>
           <head></head>
@@ -131,12 +141,57 @@ class alphabetSoupService(object):
           </body>
         </html>"""
 
+    def _cp_dispatch(self, vpath):
+        print("\n\n\n\n\n")
+        print(vpath)
+        if len(vpath) == 0:
+            print("pop1")
+            return self
+        if len(vpath) == 1:
+            return self
+        if len(vpath) == 2:
+            print("popo")
+
+        if len(vpath) == 3:
+            print("HHHHHHHHHHAL;SDJFAL")
+            if vpath[1] == 'list':
+                vpath.pop(0)
+                vpath.pop(0)
+                cherrypy.request.params['uuid'] = vpath.pop(0)
+                return List()
+                #cherrypy.session['b
+            if vpath[1] == 'view':
+                vpath.pop(0)
+                vpath.pop(0)
+                cherrypy.request.params['uuid'] = vpath.pop(0)
+                return View()
+
+        return vpath
+
+
+
     @cherrypy.expose
-    def alphabetSoup(self, w=15, h=15, ltr=True, rtl=False, ttb=False, btt=False, d=False):
+    def generate(self, w=15, h=15, ltr=True, rtl=False, ttb=False, btt=False, d=False):
         s = Soup(w,h,ltr,rtl,ttb,btt,d)
+        cherrypy.session[s.id] = s
         return s.id
     #''.join(random.sample(string.hexdigits, int(length)))
 
+class List(object):
+    @cherrypy.expose
+    def index(self, uuid):
+        return str(cherrypy.session[uuid].words)
+
+class View(object):
+    @cherrypy.expose
+    def index(self, uuid):
+        return """<html>
+                   <head>
+                   </head>
+                    <body style="font-familly:courier;">"""+str(cherrypy.session[uuid])+"""</body>
+                    </html>"""
+
+        return 
 
 if __name__ == '__main__':
     """
