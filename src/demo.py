@@ -124,7 +124,7 @@ if __name__ == '__main__':
     print("bienvenido al demo del juego de sopa de letras")
     while True:
         try:
-            accion = int(raw_input("Indique el número de lo que desea hacer\n1.Crear sopa de letras\n2.Ver lista de palabras en sopa de letras\n3.Ver sopa de letras\n4.Encontrar palabra en sopa de letras\n5.Salir"))
+            accion = int(raw_input("Indique el número de lo que desea hacer\n1.Crear sopa de letras\n2.Ver lista de palabras en sopa de letras\n3.Ver sopa de letras\n4.Encontrar palabra en sopa de letras\n5.Salir\nR = "))
         except ValueError:
             print("Debe ingresar un entero")
             continue
