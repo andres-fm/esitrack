@@ -42,7 +42,7 @@ def interact_create_soup():
     """
     Interacts with user to obtain soup parameters for creation, and then generates it with them
     """
-    params = raw_input("Desea ingresar parametros al juego? y/n")
+    params = raw_input("Desea ingresar parametros al juego? y/n ")
     params = params == 'y'
     w, h , ltr, rtl, ttb, btt, d = 15, 15, 'True', 'False', 'False', 'False', 'False'
     if params:
@@ -52,15 +52,15 @@ def interact_create_soup():
         h = int(raw_input('Alto: entero entre 15 y 80 = '))
         while not h >= 15 and h <=80:
             h = int(raw_input('Alto: entero entre 15 y 80 = '))
-        ltr = raw_input("Permitir paralabras de izquierda a derecha? y/n")
+        ltr = raw_input("Permitir paralabras de izquierda a derecha? y/n ")
         ltr = ltr == 'y'
-        rtl = raw_input("Permitir paralabras de derecha a izquierda? y/n")
+        rtl = raw_input("Permitir paralabras de derecha a izquierda? y/n ")
         rtl = rtl == 'y'
-        ttb = raw_input("Permitir paralabras de arriba hacia abajo? y/n")
+        ttb = raw_input("Permitir paralabras de arriba hacia abajo? y/n ")
         ttb = ttb == 'y'
-        btt = raw_input("Permitir paralabras de abajo hacia arriba? y/n")
+        btt = raw_input("Permitir paralabras de abajo hacia arriba? y/n ")
         btt = btt == 'y'
-        d = raw_input("Permitir paralabras en diagonal? y/n")
+        d = raw_input("Permitir paralabras en diagonal? y/n ")
         d = d == 'y'
     return generate_alphabet_soup(w, h, ltr, rtl, ttb, btt, d)
 
@@ -68,25 +68,25 @@ def interact_see_list():
     """
     Interacts with user to obtain soup id, and then requests the web service to see the soup's word list
     """
-    uuid = raw_input("Ingrese el identificador de la sopa de letras")
+    uuid = raw_input("Ingrese el identificador de la sopa de letras: ")
     return view_list_of_words(uuid)
 
 def interact_see_soup():
     """
     Interacts with user to obtain soup id, and then requests the web service to see the soup's board
     """
-    uuid = raw_input("Ingrese el identificador de la sopa de letras")
+    uuid = raw_input("Ingrese el identificador de la sopa de letras: ")
     return view_board(uuid)
 
 def interact_encuentra_palabra():
     """
     Interacts with user to obtain where he thinks there is a word, and then requests the PUT web service to verify it
     """
-    uuid = raw_input("Ingrese el identificador de la sopa de letras")
+    uuid = raw_input("Ingrese el identificador de la sopa de letras: ")
     print("Ingrese la ubicación de la palabra (indexando la sopa desde 0)")
     while True:
         try:
-            sr = int(raw_input('Renglón inicial'))
+            sr = int(raw_input('Renglón inicial: '))
         except ValueError:
             print("Debe ingresar un entero")
         else:
@@ -94,7 +94,7 @@ def interact_encuentra_palabra():
 
     while True:
         try:
-            er = int(raw_input('Renglón final'))
+            er = int(raw_input('Renglón final: '))
         except ValueError:
             print("Debe ingresar un entero")
         else:
@@ -102,7 +102,7 @@ def interact_encuentra_palabra():
 
     while True:
         try:
-            sc = int(raw_input('Columna inicial'))
+            sc = int(raw_input('Columna inicial: '))
         except ValueError:
             print("Debe ingresar un entero")
         else:
@@ -110,7 +110,7 @@ def interact_encuentra_palabra():
 
     while True:
         try:
-            ec = int(raw_input('Columna final'))
+            ec = int(raw_input('Columna final: '))
         except ValueError:
             print("Debe ingresar un entero")
         else:
@@ -124,7 +124,7 @@ if __name__ == '__main__':
     print("bienvenido al demo del juego de sopa de letras")
     while True:
         try:
-            accion = int(raw_input("Indique el número de lo que desea hacer\n1.Crear sopa de letras\n2.Ver lista de palabras en sopa de letras\n3.Ver sopa de letras\n4.Encontrar palabra en sopa de letras\n"))
+            accion = int(raw_input("Indique el número de lo que desea hacer\n1.Crear sopa de letras\n2.Ver lista de palabras en sopa de letras\n3.Ver sopa de letras\n4.Encontrar palabra en sopa de letras\n5.Salir"))
         except ValueError:
             print("Debe ingresar un entero")
             continue
@@ -136,4 +136,8 @@ if __name__ == '__main__':
             print(interact_see_soup())
         elif accion == 4:
             print(interact_encuentra_palabra())
+        elif accion == 5:
+            exit(0)
+        else:
+            print('Opción no reconocida')
     
