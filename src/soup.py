@@ -5,8 +5,23 @@ from random import randint
 from service_exceptions import NoPermissions
 
 class Soup:
+    """
+    Represents the alphaet soup for the game
+    """
     words = [word[:-1] for word in open("words.txt")]        
+
     def __init__(self, w, h, ltr, rtl, ttb, btt, d):
+        """
+        Constructor.
+        Args:
+            w = board width
+            h = board height
+            ltr = are left to right words allowed
+            rtl = are right to left words allowed
+            ttb = are top to bottom words allowed
+            btt = are bottom to top words allowed
+            d = are diagonal words allowed
+        """
         self.w = int(w)
         self.h = int(h)
         self.ltr = ltr == 'True'
@@ -25,10 +40,16 @@ class Soup:
         self.finished = False
 
     def __str__(self):
+        """
+        Returns string representation of board
+        """
         return '\n'.join(['|'+'|'.join(row)+'|' for row in self.board])
 
 
     def __create_board(self):
+        """
+        Created random board given the restrictions on word orientations
+        """
         num_words = int(self.w * self.h * 0.02)#number of words to put in soup
         permissions = []
         if self.ltr:
@@ -63,11 +84,17 @@ class Soup:
                     self.board[i][j] = chr(randint(ord('a'), ord('z')))
 
     def __empty_cell(self, i, j):
+        """
+        Tells wether the cell located at the ith row and jth column is empty
+        """
         if i < 0 or i >= self.h or j < 0 or j >= self.w:
             return False
         return self.empty_cell[i][j]
 
     def __add_word(self, direction, word):
+        """
+        Adds given word in given direction to the board. Return true if succeded, false otherwise
+        """
         #randomly selects initial word position on board
         i, j = randint(0, self.h-1), randint(0, self.w-1)
 
@@ -83,6 +110,9 @@ class Soup:
            return self.__add_word_aux(i, j, 1, 1, word)
 
     def __add_word_aux(self, i, j, ii, jj, word):
+        """
+        Auxiliar function for __add_word
+        """
         current_i = i
         current_j = j
         for _ in range(len(word)):
@@ -102,7 +132,15 @@ class Soup:
         return True
 
 
-    def encuentra(self, sr, sc, er, ec):
+    def find(self, sr, sc, er, ec):
+        """
+        Finds if the string located at position:
+        sr = start row index
+        sc = start column index
+        er = end row index
+        ec = end column index
+        is a searched word
+        """
         sr, sc, er, ec = int(sr), int(sc), int(er), int(ec)
         if sr < 0 or sr >= self.h or er < 0 or er >= self.h or sc < 0 or sc >= self.w or ec < 0 or ec >= self.w:
             return False

@@ -5,28 +5,43 @@ import requests
 s = requests.Session()
 
 def generate_alphabet_soup(w, h , ltr, rtl, ttb, btt, d):
+    """
+    Makes POST request with given alphabet soup constructor parameters to create soup and returns its id
+    """
     r = s.post('http://127.0.0.1:8080/alphabetSoup/', data = {'w':w, 'h':h, 'ltr':ltr, 'rtl':rtl, 'ttb':ttb, 'btt':btt, 'd':d})
     if r.status_code != 200:
-        raise Exception('ha ocurrido un error. Recuerde que los paramatros deben ser entre 15 y 80 para w y h, y True o False para el resto de parámetros')
+        raise Exception('Error. Remember 15 <= w,h <= 80 and the rest are True or False')
     return r.text
 
 def view_list_of_words(uuid):
+    """
+    Makes GET request with given alphabet soup id to see its word list
+    """
     r = s.get('http://127.0.0.1:8080/alphabetSoup/list/'+uuid)
     if r.status_code != 200:
-        raise Exception('ha ocurrido un error. Verifique que el id proporcionado corresponda con un id de alguna sopa de letras creada en la sesion actual')
+        raise Exception('Error. Verify given id actually exists')
     return r.text
 
 def view_board(uuid):
+    """
+    Makes GET request with given alphabet soup id to see its board
+    """
     r = s.get('http://127.0.0.1:8080/alphabetSoup/view/'+uuid)
     if r.status_code != 200:
-        raise Exception('ha ocurrido un error. Verifique que el id proporcionado corresponda con un id de alguna sopa de letras creada en la sesion actual')
+        raise Exception('Error. Verify given id actually exists')
     return r.text
 
 def find_word(uuid, sr, er, sc, ec):
+    """
+    Makes PUT request with given alphabet soup id to see if in the given location there is a soup word
+    """
     r = s.put('http://127.0.0.1:8080/alphabetSoup/'+uuid, params={'sr':sr, 'er':er, 'sc':sc, 'ec':ec})
     return r.text
 
-def interact_crea_sopa():
+def interact_create_soup():
+    """
+    Interacts with user to obtain soup parameters for creation, and then generates it with them
+    """
     params = raw_input("Desea ingresar parametros al juego? y/n")
     params = params == 'y'
     w, h , ltr, rtl, ttb, btt, d = 15, 15, 'True', 'False', 'False', 'False', 'False'
@@ -49,15 +64,24 @@ def interact_crea_sopa():
         d = d == 'y'
     return generate_alphabet_soup(w, h, ltr, rtl, ttb, btt, d)
 
-def interact_ver_lista():
+def interact_see_list():
+    """
+    Interacts with user to obtain soup id, and then requests the web service to see the soup's word list
+    """
     uuid = raw_input("Ingrese el identificador de la sopa de letras")
     return view_list_of_words(uuid)
 
-def interact_ver_sopa():
+def interact_see_soup():
+    """
+    Interacts with user to obtain soup id, and then requests the web service to see the soup's board
+    """
     uuid = raw_input("Ingrese el identificador de la sopa de letras")
     return view_board(uuid)
 
 def interact_encuentra_palabra():
+    """
+    Interacts with user to obtain where he thinks there is a word, and then requests the PUT web service to verify it
+    """
     uuid = raw_input("Ingrese el identificador de la sopa de letras")
     print("Ingrese la ubicación de la palabra (indexando la sopa desde 0)")
     while True:
@@ -105,11 +129,11 @@ if __name__ == '__main__':
             print("Debe ingresar un entero")
             continue
         if accion == 1:
-            print(interact_crea_sopa() + ' es el id de la sopa generada')
+            print(interact_create_soup() + ' es el id de la sopa generada')
         elif accion == 2:
-            print('las palabras en la sopa de letras don ' + str(interact_ver_lista()))
+            print('las palabras en la sopa de letras don ' + str(interact_see_list()))
         elif accion == 3:
-            print(interact_ver_sopa())
+            print(interact_see_soup())
         elif accion == 4:
             print(interact_encuentra_palabra())
     
